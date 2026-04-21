@@ -39,7 +39,7 @@ static int movement_threshold_handle_event(const struct device *dev,
     data->last_event_ms = now;
 
     /* Sync event: drop it while gated or mid-frame, then reset skip_frame */
-    if (event->type == INPUT_EV_SYN) {
+    if (event->sync) {
         bool drop = data->gated || data->skip_frame;
         data->skip_frame = false;
         return drop ? ZMK_INPUT_PROC_STOP : 0;
