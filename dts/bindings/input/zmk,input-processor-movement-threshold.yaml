@@ -4,26 +4,13 @@ description: |
   idle period with no input.
 
   Example:
-    &movement_threshold {
-        threshold = <10>;
-        idle-ms = <200>;
-    };
+    &movement_threshold 10 200
+
+  param1: threshold — minimum total movement (sum of |dx| + |dy|) in raw
+          sensor counts required before events are passed through.
+  param2: idle-ms — milliseconds of no input after which the accumulator
+          resets and the next movement starts gated again.
 
 compatible: "zmk,input-processor-movement-threshold"
 
-include: ip_zero_param.yaml
-
-properties:
-  threshold:
-    type: int
-    required: true
-    description: >
-      Minimum total movement (sum of |dx| + |dy|) required before events
-      are passed through. Counts are in raw sensor units.
-
-  idle-ms:
-    type: int
-    default: 200
-    description: >
-      Time in milliseconds after the last input event before the accumulator
-      resets, so the next movement starts gated again.
+include: ip_two_param.yaml
