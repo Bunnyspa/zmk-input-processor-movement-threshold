@@ -1,0 +1,29 @@
+description: |
+  Accumulates input movement from a standing start and blocks all events
+  until the total magnitude crosses a threshold. Resets after a configurable
+  idle period with no input.
+
+  Example:
+    &movement_threshold {
+        threshold = <10>;
+        idle-ms = <200>;
+    };
+
+compatible: "zmk,input-processor-movement-threshold"
+
+include: zmk-input-processor.yaml
+
+properties:
+  threshold:
+    type: int
+    required: true
+    description: >
+      Minimum total movement (sum of |dx| + |dy|) required before events
+      are passed through. Counts are in raw sensor units.
+
+  idle-ms:
+    type: int
+    default: 200
+    description: >
+      Time in milliseconds after the last input event before the accumulator
+      resets, so the next movement starts gated again.

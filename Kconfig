@@ -1,0 +1,4 @@
+config ZMK_INPUT_PROCESSOR_MOVEMENT_THRESHOLD
+    bool "Movement threshold input processor"
+    default y
+    depends on ZMK_POINTING

@@ -1,0 +1,9 @@
+/ {
+    movement_threshold: movement_threshold {
+        compatible = "zmk,input-processor-movement-threshold";
+        #input-processor-cells = <0>;
+        threshold = <10>;
+        idle-ms = <200>;
+        status = "disabled";
+    };
+};
