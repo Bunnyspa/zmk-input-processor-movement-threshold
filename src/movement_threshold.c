@@ -9,7 +9,7 @@
 LOG_MODULE_REGISTER(movement_threshold, CONFIG_ZMK_LOG_LEVEL);
 
 struct movement_threshold_data {
-    int accumulated;      /* total |dx|+|dy| since last idle reset */
+    uint32_t accumulated; /* total |dx|+|dy| since last idle reset */
     bool gated;           /* true = blocking events until threshold is met */
     bool skip_frame;      /* true = threshold crossed mid-frame, drop rest of frame */
     int64_t last_event_ms;
@@ -21,13 +21,13 @@ static int movement_threshold_handle_event(const struct device *dev,
                                            uint32_t param2,
                                            struct zmk_input_processor_state *state) {
     struct movement_threshold_data *data = dev->data;
-    int threshold = (int)param1;
-    int idle_ms   = (int)param2;
+    uint32_t threshold = param1;
+    uint32_t idle_ms   = param2;
 
     int64_t now = k_uptime_get();
 
     /* Reset accumulator after idle — next movement starts gated again */
-    if (now - data->last_event_ms > idle_ms) {
+    if (now - data->last_event_ms > (int64_t)idle_ms) {
         data->accumulated = 0;
         data->gated = true;
         data->skip_frame = false;
@@ -39,20 +39,21 @@ static int movement_threshold_handle_event(const struct device *dev,
     if (event->sync) {
         bool drop = data->gated || data->skip_frame;
         data->skip_frame = false;
-        return drop ? ZMK_INPUT_PROC_STOP : 0;
+        return drop ? ZMK_INPUT_PROC_STOP : ZMK_INPUT_PROC_CONTINUE;
     }
 
-    /* Only accumulate REL X/Y movement; pass all other event types through */
+    /* Only REL X/Y events contribute to accumulation; block others while gated */
     if (event->type != INPUT_EV_REL ||
         (event->code != INPUT_REL_X && event->code != INPUT_REL_Y)) {
-        return data->gated ? ZMK_INPUT_PROC_STOP : 0;
+        return data->gated ? ZMK_INPUT_PROC_STOP : ZMK_INPUT_PROC_CONTINUE;
     }
 
-    if (!data->gated) {
-        return 0;
+    if (!data->gated && !data->skip_frame) {
+        return ZMK_INPUT_PROC_CONTINUE;
     }
 
-    data->accumulated += abs(event->value);
+    int32_t v = event->value;
+    data->accumulated += (uint32_t)(v < 0 ? -v : v);
 
     if (data->accumulated >= threshold) {
         /* Threshold met — open the gate, but skip the rest of this frame so
@@ -61,9 +62,7 @@ static int movement_threshold_handle_event(const struct device *dev,
         data->skip_frame = true;
     }
 
-    /* Fix 2: stop the event entirely so zip_temp_layer never sees it.
-     * Zeroing event->value (Fix 1) was insufficient — zip_temp_layer fires
-     * on any event regardless of value. */
+    /* Block further processing until threshold is met */
     return ZMK_INPUT_PROC_STOP;
 }
 
@@ -72,13 +71,13 @@ static const struct zmk_input_processor_driver_api movement_threshold_api = {
 };
 
 #define MOVEMENT_THRESHOLD_INST(n)                                          \
-    static struct movement_threshold_data data_##n = {                     \
+    static struct movement_threshold_data data_##n = {                      \
         .accumulated = 0,                                                   \
         .gated = true,                                                      \
         .skip_frame = false,                                                \
         .last_event_ms = 0,                                                 \
     };                                                                      \
-    DEVICE_DT_INST_DEFINE(n, NULL, NULL, &data_##n, NULL,                  \
+    DEVICE_DT_INST_DEFINE(n, NULL, NULL, &data_##n, NULL,                   \
                           POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, \
                           &movement_threshold_api);
 
