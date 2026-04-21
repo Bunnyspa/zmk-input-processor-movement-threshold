@@ -49,11 +49,10 @@ static int movement_threshold_handle_event(const struct device *dev,
 
     if (data->accumulated >= cfg->threshold) {
         data->gated = false;
+        return 0;
     }
 
-    /* Block the event while still accumulating */
-    event->value = 0;
-    return 0;
+    return ZMK_INPUT_PROC_STOP;
 }
 
 static const struct zmk_input_processor_driver_api movement_threshold_api = {
