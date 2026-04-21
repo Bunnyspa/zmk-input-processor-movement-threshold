@@ -3,9 +3,9 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
 #include <zephyr/input/input.h>
-#include <zmk/input_processor.h>
-
+#include <drivers/input_processor.h>
 #include <zephyr/logging/log.h>
+
 LOG_MODULE_REGISTER(movement_threshold, CONFIG_ZMK_LOG_LEVEL);
 
 struct movement_threshold_config {
@@ -29,7 +29,7 @@ static int movement_threshold_handle_event(const struct device *dev,
 
     if (event->type != INPUT_EV_REL ||
         (event->code != INPUT_REL_X && event->code != INPUT_REL_Y)) {
-        return ZMK_INPUT_PROC_CONTINUE;
+        return 0;
     }
 
     int64_t now = k_uptime_get();
@@ -42,7 +42,7 @@ static int movement_threshold_handle_event(const struct device *dev,
     data->last_event_ms = now;
 
     if (!data->gated) {
-        return ZMK_INPUT_PROC_CONTINUE;
+        return 0;
     }
 
     data->accumulated += abs(event->value);
@@ -53,7 +53,7 @@ static int movement_threshold_handle_event(const struct device *dev,
 
     /* Block the event while still accumulating */
     event->value = 0;
-    return ZMK_INPUT_PROC_CONTINUE;
+    return 0;
 }
 
 static const struct zmk_input_processor_driver_api movement_threshold_api = {
