@@ -2,9 +2,7 @@
 
 A [ZMK](https://zmk.dev) input processor that gates pointing device output until enough movement has accumulated to confirm intentional input. Accidental contact — a finger resting on or brushing the device — is silently discarded. Once the accumulated movement crosses the threshold, normal output resumes until the device goes idle.
 
-## Installation
-
-Add this module to your `config/west.yml`:
+## `config/west.yml`
 
 ```yaml
 manifest:
@@ -29,9 +27,7 @@ manifest:
     path: config
 ```
 
-## Prerequisites
-
-Add to your `<keyboard>.conf`:
+## `<keyboard>.conf`
 
 ```ini
 CONFIG_ZMK_POINTING=y
