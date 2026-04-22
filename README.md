@@ -29,6 +29,15 @@ manifest:
     path: config
 ```
 
+## Prerequisites
+
+Add to your `<keyboard>.conf`:
+
+```ini
+CONFIG_ZMK_POINTING=y
+CONFIG_ZMK_INPUT_PROCESSOR_MOVEMENT_THRESHOLD=y
+```
+
 ## Usage
 
 Add the following to your `<keyboard>.overlay` or `<keyboard>.dtsi`:
