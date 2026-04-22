@@ -45,7 +45,7 @@ Add the following to your `<keyboard>.overlay` or `<keyboard>.dtsi`:
 };
 ```
 
-Replace `pointing_device_listener` and `&pointing_device` with your actual listener (e.g. `trackball_listener`) and device (e.g. `&trackball`) labels. If your board or shield already defines an input-listener node, reference it instead of creating a new one:
+Replace `pointing_device_listener` and `&pointing_device` with your actual listener and device labels (e.g. `trackball_listener` and `&trackball`). If your board or shield already defines an input-listener node, reference it instead of creating a new one:
 
 ```c
 &defined_listener_label {
