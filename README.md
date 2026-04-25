@@ -72,15 +72,15 @@ The values below are calculated and may not reflect real-world sensor behavior. 
 
 <table>
 <thead>
-<tr><th rowspan="2">Sensor CPI</th><th colspan="3">34mm trackball</th><th colspan="3">40mm trackball</th></tr>
-<tr><th>5°</th><th>10°</th><th>15°</th><th>5°</th><th>10°</th><th>15°</th></tr>
+<tr><th rowspan="2" align="center">Sensor CPI</th><th colspan="3" align="center">34mm trackball</th><th colspan="3" align="center">40mm trackball</th></tr>
+<tr><th align="center">5°</th><th align="center">10°</th><th align="center">15°</th><th align="center">5°</th><th align="center">10°</th><th align="center">15°</th></tr>
 </thead>
 <tbody>
-<tr><td>400</td><td>23</td><td>47</td><td>70</td><td>27</td><td>55</td><td>82</td></tr>
-<tr><td>600</td><td>35</td><td>70</td><td>105</td><td>41</td><td>82</td><td>124</td></tr>
-<tr><td>800</td><td>47</td><td>93</td><td>140</td><td>55</td><td>110</td><td>165</td></tr>
-<tr><td>1200</td><td>70</td><td>140</td><td>210</td><td>82</td><td>165</td><td>247</td></tr>
-<tr><td>1600</td><td>93</td><td>187</td><td>280</td><td>110</td><td>220</td><td>330</td></tr>
+<tr><td align="center">400</td><td align="center">23</td><td align="center">47</td><td align="center">70</td><td align="center">27</td><td align="center">55</td><td align="center">82</td></tr>
+<tr><td align="center">600</td><td align="center">35</td><td align="center">70</td><td align="center">105</td><td align="center">41</td><td align="center">82</td><td align="center">124</td></tr>
+<tr><td align="center">800</td><td align="center">47</td><td align="center">93</td><td align="center">140</td><td align="center">55</td><td align="center">110</td><td align="center">165</td></tr>
+<tr><td align="center">1200</td><td align="center">70</td><td align="center">140</td><td align="center">210</td><td align="center">82</td><td align="center">165</td><td align="center">247</td></tr>
+<tr><td align="center">1600</td><td align="center">93</td><td align="center">187</td><td align="center">280</td><td align="center">110</td><td align="center">220</td><td align="center">330</td></tr>
 </tbody>
 </table>
 
