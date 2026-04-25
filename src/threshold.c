@@ -8,6 +8,15 @@
 
 LOG_MODULE_REGISTER(threshold, CONFIG_ZMK_LOG_LEVEL);
 
+static bool is_button(const struct input_event *event) {
+    return event->type == INPUT_EV_KEY;
+}
+
+static bool is_scroll(const struct input_event *event) {
+    return event->type == INPUT_EV_REL &&
+           (event->code == INPUT_REL_WHEEL || event->code == INPUT_REL_HWHEEL);
+}
+
 struct threshold_data {
     uint32_t accumulated; /* total |dx|+|dy| since last idle reset */
     bool blocked;           /* true = blocking events until threshold is met */
@@ -45,15 +54,9 @@ static int threshold_handle_event(const struct device *dev,
     /* Non-movement events do not contribute to accumulation */
     if (event->type != INPUT_EV_REL ||
         (event->code != INPUT_REL_X && event->code != INPUT_REL_Y)) {
-        if (!data->blocked) {
-            return ZMK_INPUT_PROC_CONTINUE;
-        }
-        if (event->type == INPUT_EV_KEY && IS_ENABLED(CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD_BLOCK_BUTTONS)) {
-            return ZMK_INPUT_PROC_STOP;
-        }
-        if (event->type == INPUT_EV_REL && IS_ENABLED(CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD_BLOCK_SCROLL)) {
-            return ZMK_INPUT_PROC_STOP;
-        }
+        if (!data->blocked) return ZMK_INPUT_PROC_CONTINUE;
+        if (is_button(event) && IS_ENABLED(CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD_BLOCK_BUTTONS)) return ZMK_INPUT_PROC_STOP;
+        if (is_scroll(event) && IS_ENABLED(CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD_BLOCK_SCROLL))  return ZMK_INPUT_PROC_STOP;
         return ZMK_INPUT_PROC_CONTINUE;
     }
 
