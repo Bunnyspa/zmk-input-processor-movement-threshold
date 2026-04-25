@@ -37,7 +37,7 @@ manifest:
 CONFIG_ZMK_POINTING=y
 CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD=y
 
-# Optional, for trackpad — buttons and scroll are blocked while threshold is not met by default. Change to =n to disable.
+# Optional, for trackpad — blocked by default. Change to =n to disable.
 CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD_BLOCK_BUTTONS=y
 CONFIG_ZMK_INPUT_PROCESSOR_THRESHOLD_BLOCK_SCROLL=y
 ```
